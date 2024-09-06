@@ -1,51 +1,79 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { useGlobalContext } from '../context/global'
 import VideoJS from './VideoJS'
-import videojs from 'video.js';
 import 'videojs-contrib-quality-levels';
+import axios from 'axios';
 
 function VideoPlayer() {
+    const [currentPlayerTime, setCurrentPlayerTime] = useState(0)
     const { id } = useParams();
     const { videos } = useGlobalContext();
-    const video = videos.find((vid) => {
-        return vid._id === id;
-    });
-
-    // Refs
+    const video = videos.find((vid) => vid._id == id);
     const videoConRef = useRef(null);
     const playerRef = React.useRef(null);
 
+
+    useEffect(() => {
+        if (video) {
+            axios.get(`http://192.168.1.11:3001/api/v1/teacher/tracking/getProgress/${video?.lessonId}/${video?.mediaId}`)
+                .then(res => {
+                    if (res.data) {
+                        const { currentTime } = res.data;
+
+                        if (currentTime === video?.duration) {
+                            setCurrentPlayerTime(0);
+                        } else if (currentTime > 0) {
+                            setCurrentPlayerTime(currentTime);
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching current time:', err);
+                });
+        }
+    }, [video]);
+
     const handlePlayerReady = (player) => {
         playerRef.current = player;
+
+        let hasReached95Percent = false;
+
+        player.currentTime(currentPlayerTime);
 
         player.on('timeupdate', () => {
             const currentTime = player.currentTime();
             const duration = player.duration();
             const watchedPercentage = (currentTime / duration) * 100;
+            if (watchedPercentage >= 95 && !hasReached95Percent) {
+                console.log("===================Video completed 95%======================");
+                hasReached95Percent = true;
+                hitAPIOnCompletion(video, currentTime);
+            }
+
             console.log(`Video watched: ${watchedPercentage.toFixed(2)}%`);
         });
 
         player.on('play', () => {
             console.log('Video is playing');
-
         });
 
         player.on('pause', () => {
             console.log('Video is paused');
         });
+
+        player.on('timeupdate', () => {
+            const currentTime = player.currentTime();
+            console.log(`Current Time: ${currentTime}`);
+        });
+
         player.on('waiting', () => {
             console.log('Player is waiting (buffering)');
         });
 
         player.on('dispose', () => {
             console.log('Player will dispose');
-        });
-
-        player.on('timeupdate', () => {
-            const currentTime = player.currentTime();
-            console.log(`Current Time: ${currentTime}`);
         });
 
         player.on('loadedmetadata', () => {
@@ -66,13 +94,26 @@ function VideoPlayer() {
         player.on('ended', () => {
             console.log('Video completed');
         });
+    };
 
-        player.on('timeupdate', () => {
-            const currentTime = player.currentTime();
-            const duration = player.duration();
-            const progressPercentage = (currentTime / duration) * 100;
-            console.log(`Video Progress: ${progressPercentage.toFixed(2)}%`);
-        });
+    const hitAPIOnCompletion = (videoData, currentTime) => {
+        console.log("API call triggered at 95% video completion");
+        console.log("Video Metadata:", videoData);
+        const payload = {
+            lessonId: videoData?.lessonId,
+            mediaId: videoData?.mediaId,
+            isComplete: true,
+            currentTime: currentTime
+        }
+
+        axios.post('http://192.168.1.24:3001/api/v1/teacher/tracking/updateProgress', payload)
+            .then(response => {
+                console.log('API Response:', response.data);
+            })
+            .catch(error => {
+                console.error('Error making API request:', error);
+            });
+
     };
 
     const videoOptions = {
@@ -82,8 +123,7 @@ function VideoPlayer() {
         fluid: true,
         alwaysShowControls: true,
         sources: [{
-            src: video?.videoUrl,
-            // type: 'video/mp4'
+            src: video?.videoUrl
         }],
         controlBar: {
             children: [
@@ -102,7 +142,7 @@ function VideoPlayer() {
                 countDown: false,
             }
         }
-    };
+    }
 
     return (
         <VideoPlayerStyled >

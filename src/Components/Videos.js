@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { useGlobalContext } from '../context/global';
 import VideoJS from './VideoJS';
+import { FaCheck } from "react-icons/fa";
 
 function Videos() {
     const { videos } = useGlobalContext()
@@ -26,6 +27,7 @@ function Videos() {
                                 }}
                             />
                             <h4>{video.title}</h4>
+                            <FaCheck />
                             <p>{video.description}</p>
                         </div>
                     </Link>

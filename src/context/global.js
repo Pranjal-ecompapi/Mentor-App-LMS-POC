@@ -44,53 +44,47 @@ export const GlobalProvider = ({ children }) => {
     //get videos
     const getAllVideos = () => {
         const data = {
+
             videos: [
                 {
-                    _id: "1",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
+                    _id: 1,
+                    mediaId: "media_001",
+                    lessonId: "lesson_001",
+                    videoUrl: "http://localhost:5000/uploads/courses/57a9f323-07e8-4eed-b4e1-ab3ab5dcc500/index.m3u8",
                     title: "Testing",
-                    description: "This is the description of testing"
+                    description: "This is the description of testing",
                 },
                 {
-                    _id: "2",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
+                    _id: 2,
+                    mediaId: "2",
+                    lessonId: "2",
+                    videoUrl: "http://localhost:5000/uploads/courses/57a9f323-07e8-4eed-b4e1-ab3ab5dcc500/index.m3u8",
                     title: "Testing",
-                    description: "This is the description of testing"
+                    description: "This is the description of testing",
                 },
                 {
-                    _id: "3",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
+                    _id: 3,
+                    mediaId: "3",
+                    lessonId: "3",
+                    videoUrl: "http://localhost:5000/uploads/courses/57a9f323-07e8-4eed-b4e1-ab3ab5dcc500/index.m3u8",
                     title: "Testing",
-                    description: "This is the description of testing"
+                    description: "This is the description of testing",
                 },
                 {
-                    _id: "4",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
+                    _id: 4,
+                    mediaId: "4",
+                    lessonId: "4",
+                    videoUrl: "http://localhost:5000/uploads/courses/57a9f323-07e8-4eed-b4e1-ab3ab5dcc500/index.m3u8",
                     title: "Testing",
-                    description: "This is the description of testing"
+                    description: "This is the description of testing",
                 },
                 {
-                    _id: "5",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
+                    _id: 5,
+                    mediaId: "5",
+                    lessonId: "5",
+                    videoUrl: "http://localhost:5000/uploads/courses/57a9f323-07e8-4eed-b4e1-ab3ab5dcc500/index.m3u8",
                     title: "Testing",
-                    description: "This is the description of testing"
-                }, {
-                    _id: "6",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
-                    title: "Testing",
-                    description: "This is the description of testing"
-                },
-                {
-                    _id: "7",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
-                    title: "Testing",
-                    description: "This is the description of testing"
-                },
-                {
-                    _id: "8",
-                    videoUrl: "http://localhost:5000/uploads/courses/dadb4fa9-02fb-46fe-b833-2347118e6709/index.m3u8",
-                    title: "Testing",
-                    description: "This is the description of testing"
+                    description: "This is the description of testing",
                 }
             ]
         }
